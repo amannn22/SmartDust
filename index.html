@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Dust Bin - Eco Points System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.0.0/qrcode.min.js"></script> 
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <i class="fas fa-recycle"></i>
+                    <span>Smart Dust Bin</span>
+                </div>
+                <div class="nav-menu" id="navMenu">
+                    <div class="nav-links" id="navLinks">
+                        <a href="#" onclick="showPage('dashboard')" class="nav-link">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <a href="#" onclick="showPage('scan')" class="nav-link">
+                            <i class="fas fa-qrcode"></i> Scan QR
+                        </a>
+                        <a href="#" onclick="showPage('coupons')" class="nav-link">
+                            <i class="fas fa-gift"></i> Coupons
+                        </a>
+                        <a href="#" onclick="showPage('history')" class="nav-link">
+                            <i class="fas fa-history"></i> History
+                        </a>
+                        <a href="#" onclick="logout()" class="nav-link logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                <div class="hamburger" onclick="toggleNav()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <div id="authModal" class="modal">
+            <div class="modal-content">
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <i class="fas fa-recycle auth-icon"></i>
+                        <h2>Welcome to Smart Dust Bin</h2>
+                        <p>Join the eco-friendly revolution and earn points for recycling!</p>
+                    </div>
+                    
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                        <button class="tab-btn" onclick="switchTab('register')">Register</button>
+                    </div>
+
+                    <form id="loginForm" class="auth-form active">
+                        <div class="form-group">
+                            <label for="loginUsername">Username</label>
+                            <input type="text" id="loginUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="auth-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </form>
+
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="registerUsername">Username</label>
+                            <input type="text" id="registerUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <button type="submit" class="auth-btn">
+                            <i class="fas fa-user-plus"></i> Register
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div id="dashboardPage" class="page active">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <div class="user-info">
+                        <div class="points-display">
+                            <i class="fas fa-coins"></i>
+                            <span id="userPoints">0</span> Points
+                        </div>
+                        <div class="user-name">
+                            Welcome, <span id="userName">User</span>!
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="dashboard-grid">
+                    <div class="card stats-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> Your Stats</h3>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalPoints">0</div>
+                                <div class="stat-label">Total Points</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalScans">0</div>
+                                <div class="stat-label">QR Scans</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalRedeemed">0</div>
+                                <div class="stat-label">Coupons Used</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card quick-actions">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="showPage('scan')">
+                                <i class="fas fa-qrcode"></i>
+                                <span>Scan QR Code</span>
+                            </button>
+                            <button class="action-btn" onclick="showPage('coupons')">
+                                <i class="fas fa-gift"></i>
+                                <span>View Coupons</span>
+                            </button>
+                            <button class="action-btn" onclick="generateDemoQR()">
+                                <i class="fas fa-magic"></i>
+                                <span>Demo QR</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+
+                    <div class="card recent-activity">
+                        <div class="card-header">
+                            <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                        </div>
+                        <div id="recentActivity" class="activity-list">
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scanPage" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-qrcode"></i> Scan QR Code</h1>
+                    <p>Point your camera at a QR code from the dust bin to earn points!</p>
+                </div>
+
+                <div class="scanner-container">
+                    <div class="card scanner-card">
+                        <div id="qr-reader" class="qr-reader"></div>
+                        <div class="scanner-controls">
+                            <button id="startScanBtn" class="scanner-btn primary" onclick="startScanner()">
+                                <i class="fas fa-camera"></i> Start Camera
+                            </button>
+                            <button id="stopScanBtn" class="scanner-btn secondary" onclick="stopScanner()" style="display: none;">
+                                <i class="fas fa-stop"></i> Stop Camera
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card demo-section">
+                        <div class="card-header">
+                            <h3><i class="fas fa-magic"></i> Try Demo QR</h3>
+                        </div>
+                        <p>Generate a demo QR code to test the scanning feature:</p>
+                        <button class="demo-btn" onclick="generateDemoQR()">
+                            <i class="fas fa-plus-circle"></i> Generate Demo QR
+                        </button>
+                        <div id="demoQRContainer" class="demo-qr-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="couponsPage" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-gift"></i> Available Coupons</h1>
+                    <p>Redeem your hard-earned points for amazing eco-friendly rewards!</p>
+                </div>
+
+                <div id="couponsGrid" class="coupons-grid">
+                    </div>
+            </div>
+
+            <div id="historyPage" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-history"></i> Points History</h1>
+                    <p>Track all your points transactions and redemptions</p>
+                </div>
+
+                <div class="history-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-list"></i> Transaction History</h3>
+                        </div>
+                        <div id="pointsHistory" class="history-list">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+    <footer style="background-color:#715DBB; color: #000000; text-align: center; padding: 1rem 0; font-size: 0.9rem; border-top: 1px solid #2d3748; margin-top: auto;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
+            &copy; 2025 Smart Dust Bin. All rights reserved. Developed by Team TITANS.
+        </div>
+    </footer>
+     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
