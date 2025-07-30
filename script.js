@@ -4,7 +4,7 @@ const LS_LOGGED_IN_USER_KEY = 'smartDustbinLoggedInUser'; // Stores username of 
 // --- Supabase Configuration ---
 // Replace with your actual Supabase project URL and Anon key
 const SUPABASE_URL = 'https://ynqlxqqeprgxjjusihlg.supabase.co'; // e.g., 'https://xyzabcdefg.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlucWx4cXFlcHJneGpqdXNpaGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4NTczMTEsImV4cCI6MjA2OTQzMzMxMX0.CtRdrVjnyy7atnFPwVGAhwpF08yDt-VDmVbJ8gnrVKM'; // e.g., 'eyJ...your_anon_key...asdf'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlucWx4cXFlcHJneGpqdXNpaGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4NTczMTEsImV4cCI6MjA2OTQzMzMxMX0.CtRdrVjnyy7atnFPwVGAhwpF08yDt-VDmVbJ8gnrVKM'; // e.g., 'eyJ...your_anon_key...asdf'll
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
